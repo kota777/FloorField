@@ -63,8 +63,8 @@ public class DenebFloorField extends JFrame implements ActionListener
 	static Boolean [] agentLive = new Boolean [nAgent];
 
 	/* 出口の設定 */
-	static int exitX = xCell/2;
-	static int exitY = 0;
+	static int exitX[] = {(int)(xCell * 0.33), (int)(xCell * 0.66), 0, xCell-1};
+	static int exitY[] = {0, 0, (int)(yCell * 0.9), (int)(yCell * 0.9)};
 
 	static Random rand = new Random();
 
@@ -97,23 +97,32 @@ public class DenebFloorField extends JFrame implements ActionListener
 		double qq,qr,ql,qu,qd,
 			pr,pl,pu,pd,psum,r,
 			px,py;
+		double minQq;
+		int nearlyExit = 0;
 		Boolean moved = false;
 
 		for(i=0;i<nAgent;i++){
 			if(agentLive[i]){
 				x = agentX[i];
 				y = agentY[i];
-				qq = Math.sqrt((x-exitX)*(x-exitX) + (y-exitY)*(y-exitY));
+				minQq = Double.MAX_VALUE;
+				for (int j = 0; j < exitX.length; j++) {
+					qq = Math.sqrt((x-exitX[j])*(x-exitX[j]) + (y-exitY[j])*(y-exitY[j]));	
+					if(qq < minQq){
+						minQq = qq;
+						nearlyExit = j;
+					}
+				}
+				
+				qr = Math.sqrt((x-exitX[nearlyExit]+1)*(x-exitX[nearlyExit]+1) + (y-exitY[nearlyExit]  )*(y-exitY[nearlyExit]  ));
+				qd = Math.sqrt((x-exitX[nearlyExit]  )*(x-exitX[nearlyExit]  ) + (y-exitY[nearlyExit]+1)*(y-exitY[nearlyExit]+1));
+				ql = Math.sqrt((x-exitX[nearlyExit]-1)*(x-exitX[nearlyExit]-1) + (y-exitY[nearlyExit]  )*(y-exitY[nearlyExit]  ));
+				qu = Math.sqrt((x-exitX[nearlyExit]  )*(x-exitX[nearlyExit]  ) + (y-exitY[nearlyExit]-1)*(y-exitY[nearlyExit]-1));
 	
-				qr = Math.sqrt((x-exitX+1)*(x-exitX+1) + (y-exitY  )*(y-exitY  ));
-				qd = Math.sqrt((x-exitX  )*(x-exitX  ) + (y-exitY+1)*(y-exitY+1));
-				ql = Math.sqrt((x-exitX-1)*(x-exitX-1) + (y-exitY  )*(y-exitY  ));
-				qu = Math.sqrt((x-exitX  )*(x-exitX  ) + (y-exitY-1)*(y-exitY-1));
-	
-				pr = Math.exp(ks*(qq-qr));
-				pd = Math.exp(ks*(qq-qd));
-				pl = Math.exp(ks*(qq-ql));
-				pu = Math.exp(ks*(qq-qu));
+				pr = Math.exp(ks*(minQq-qr));
+				pd = Math.exp(ks*(minQq-qd));
+				pl = Math.exp(ks*(minQq-ql));
+				pu = Math.exp(ks*(minQq-qu));
 	
 				psum = pr + pl + pu + pd;
 				pr /= psum;
@@ -157,11 +166,11 @@ public class DenebFloorField extends JFrame implements ActionListener
 					px = sideMargin + agentX[i] * dx;
 					py = topMargin  + agentY[i] * dy;
 					g2.fill(new Rectangle2D.Double(px,py,dy,dx));
-					if(agentX[i] == exitX && agentY[i] == exitY){
+					if(agentX[i] == exitX[nearlyExit] && agentY[i] == exitY[nearlyExit]){
 						g2.setPaint(Color.blue);
 						g2.fill(new Rectangle2D.Double(px,py,dy,dx));
 						agentLive[i] = false;
-						cell[exitY][exitX] = 0;
+						cell[exitY[nearlyExit]][exitX[nearlyExit]] = 0;
 					}
 				}
 			}
@@ -207,8 +216,11 @@ public class DenebFloorField extends JFrame implements ActionListener
 			g2.draw(new Rectangle2D.Double(sideMargin,topMargin,width,height));
 			goNextStep(g2);
 			g2.setPaint(Color.green);
-			g2.fill(new Rectangle2D.Double(sideMargin + exitX * dx,
-				topMargin  + exitY * dy, dx, dy));
+			for (int i = 0; i < exitX.length; i++) {
+				g2.fill(new Rectangle2D.Double(sideMargin + exitX[i] * dx,
+						topMargin  + exitY[i] * dy, dx, dy));				
+			}
+
 		}
 	}
 
