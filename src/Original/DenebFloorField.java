@@ -54,7 +54,7 @@ public class DenebFloorField extends JFrame implements ActionListener
 	static double height,width;
 
 	/* エージェント数 */
-	static int nAgent = 100;
+	static int nAgent = 600;
 	/* エージェントX座標 */
 	static int [] agentX = new int [nAgent];
 	/* エージェントY座標 */
@@ -71,7 +71,7 @@ public class DenebFloorField extends JFrame implements ActionListener
 	/* 出口に近付きやすくなる係数 */
 	static double ks = 1.0;
 	/* コマ送りの間隔 */
-	static int delay = 70;
+	static int delay = 10;
 
 	Timer timer;
 	AnimationPane animationPane;
@@ -90,6 +90,10 @@ public class DenebFloorField extends JFrame implements ActionListener
 		for(int i=0;i<nAgent;i++){
 			int x = rand.nextInt(xCell);
 			int y = rand.nextInt(yCell);
+			while(cell[y][x] == 1){
+				x = rand.nextInt(xCell);
+				y = rand.nextInt(yCell);
+			}
 			agentX[i] = x;
 			agentY[i] = y;
 			agentLive[i] = true;
