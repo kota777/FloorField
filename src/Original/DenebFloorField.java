@@ -9,7 +9,7 @@
  * 
  * セット間は1人スペース
  * 壁際は2人スペース
- * 8列ごとに2人スペースの通路
+ * 9列ごとに2人スペースの通路
  */
 
 package Original;
@@ -31,15 +31,20 @@ import javax.swing.Timer;
 
 public class DenebFloorField extends JFrame implements ActionListener
 {
-
-	/* 描画のためのパラメータ 
-	 * 
-	 */
-	static double frameWidth   = 680.0;
-	static double frameHeight  = 680.0;
-	final static double topMargin	=  50.0;
-	final static double bottomMargin =  50.0;
-	final static double sideMargin   =  50.0;
+	/* ２次元セル */
+	final static int xCell	 =  33;
+	final static int yCell	 =  62;
+	/* セルにエージェントが存在するかしないか */
+	static int [][] cell = new int [yCell][xCell];
+	/* セルの描画サイズ */
+	static double dx,dy;
+	
+	/* 描画のためのパラメータ */	
+	static double frameWidth   = xCell * 8;
+	static double frameHeight  = yCell * 8;
+	final static double topMargin	=  25.0;
+	final static double bottomMargin =  25.0;
+	final static double sideMargin   =  25.0;
 	final static Color bgcolor = Color.white;
 	final static Color fgcolor = new Color(100,0,20);
 	final static BasicStroke normalStroke	 = new BasicStroke(1.0f);
@@ -56,14 +61,6 @@ public class DenebFloorField extends JFrame implements ActionListener
 	static int [] agentY = new int [nAgent];
 	/* エージェントの脱出判定 */
 	static Boolean [] agentLive = new Boolean [nAgent];
-
-	/* ２次元セル */
-	final static int xCell	 =  160;
-	final static int yCell	 =  80;
-	/* セルにエージェントが存在するかしないか */
-	static int [][] cell = new int [yCell][xCell];
-	/* セルの描画サイズ */
-	static double dx,dy;
 
 	/* 出口の設定 */
 	static int exitX = xCell/2;
