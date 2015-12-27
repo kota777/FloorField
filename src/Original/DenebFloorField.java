@@ -71,7 +71,7 @@ public class DenebFloorField extends JFrame implements ActionListener
 	/* 出口に近付きやすくなる係数 */
 	static double ks = 1.0;
 	/* コマ送りの間隔 */
-	static int delay = 10;
+	static int delay = 70;
 
 	Timer timer;
 	AnimationPane animationPane;
@@ -79,6 +79,14 @@ public class DenebFloorField extends JFrame implements ActionListener
 	/** エージェントのランダム配置
 	*/
 	void initCells(){
+		/* 椅子の配置 */
+		for (int i = 1; i < xCell-1; i++) {
+			if((i-1) % 6 == 0) continue;
+			for (int j = 1; j < yCell-1; j++) {
+				if((j-1) % 9 == 0 || (j-1) % 2 == 0) continue;
+				cell[j][i] = 1;
+			}
+		}
 		for(int i=0;i<nAgent;i++){
 			int x = rand.nextInt(xCell);
 			int y = rand.nextInt(yCell);
@@ -219,6 +227,17 @@ public class DenebFloorField extends JFrame implements ActionListener
 			for (int i = 0; i < exitX.length; i++) {
 				g2.fill(new Rectangle2D.Double(sideMargin + exitX[i] * dx,
 						topMargin  + exitY[i] * dy, dx, dy));				
+			}
+			/* 椅子の配置 */
+			for (int i = 1; i < xCell-1; i++) {
+				if((i-1) % 6 == 0) continue;
+				for (int j = 1; j < yCell-1; j++) {
+					if((j-1) % 9 == 0 || (j-1) % 2 == 0) continue;
+					g2.setPaint(Color.gray);
+					double px = sideMargin + i * dx;
+					double py = topMargin  + j * dy;
+					g2.fill(new Rectangle2D.Double(px,py,dy,dx));
+				}
 			}
 
 		}
