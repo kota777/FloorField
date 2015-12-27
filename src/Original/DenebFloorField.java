@@ -63,8 +63,8 @@ public class DenebFloorField extends JFrame implements ActionListener
 	static Boolean [] agentLive = new Boolean [nAgent];
 
 	/* 出口の設定 */
-	static int exitX[] = {(int)(xCell * 0.33), (int)(xCell * 0.66), 0, xCell-1};
-	static int exitY[] = {0, 0, (int)(yCell * 0.9), (int)(yCell * 0.9)};
+	static int exitX[] = {(int)(xCell * 0.33), (int)(xCell * 0.66), xCell-1, 0};
+	static int exitY[] = {yCell-1, yCell-1, (int)(yCell * 0.1), (int)(yCell * 0.1)};
 
 	static Random rand = new Random();
 
