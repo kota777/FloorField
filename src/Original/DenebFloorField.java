@@ -32,7 +32,9 @@ import javax.swing.Timer;
 public class DenebFloorField extends JFrame implements ActionListener
 {
 
-	/* 描画のためのパラメータ */
+	/* 描画のためのパラメータ 
+	 * 
+	 */
 	static double frameWidth   = 680.0;
 	static double frameHeight  = 680.0;
 	final static double topMargin	=  50.0;
@@ -56,14 +58,15 @@ public class DenebFloorField extends JFrame implements ActionListener
 	static Boolean [] agentLive = new Boolean [nAgent];
 
 	/* ２次元セル */
-	final static int nCell	 =  80;
+	final static int xCell	 =  160;
+	final static int yCell	 =  80;
 	/* セルにエージェントが存在するかしないか */
-	static int [][] cell = new int [nCell][nCell];
+	static int [][] cell = new int [yCell][xCell];
 	/* セルの描画サイズ */
 	static double dx,dy;
 
 	/* 出口の設定 */
-	static int exitX = nCell/2;
+	static int exitX = xCell/2;
 	static int exitY = 0;
 
 	static Random rand = new Random();
@@ -80,8 +83,8 @@ public class DenebFloorField extends JFrame implements ActionListener
 	*/
 	void initCells(){
 		for(int i=0;i<nAgent;i++){
-			int x = rand.nextInt(nCell);
-			int y = rand.nextInt(nCell);
+			int x = rand.nextInt(xCell);
+			int y = rand.nextInt(yCell);
 			agentX[i] = x;
 			agentY[i] = y;
 			agentLive[i] = true;
@@ -123,13 +126,13 @@ public class DenebFloorField extends JFrame implements ActionListener
 	
 				r = rand.nextDouble();
 				if (r < pr){
-					if(x < nCell-1 && cell[y][x+1] == 0){
+					if(x < xCell-1 && cell[y][x+1] == 0){
 						agentX[i] ++;
 						moved = true;
 					}
 				}
 				else if (r < pr + pd){
-					if(y < nCell - 1 && cell[y+1][x] == 0){
+					if(y < yCell - 1 && cell[y+1][x] == 0){
 						agentY[i] ++;
 						moved = true;
 					}
@@ -182,8 +185,8 @@ public class DenebFloorField extends JFrame implements ActionListener
 		frameHeight = d.height;
 		width =  frameWidth - 2 * sideMargin;
 		height = frameHeight - (topMargin + bottomMargin);
-		dx = width / nCell;
-		dy = height / nCell;
+		dx = width / xCell;
+		dy = height / yCell;
 	}
 
 	/**
